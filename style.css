@@ -1,0 +1,181 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    cursor: crosshair;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Title overlay */
+#title-overlay {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 1.5s ease;
+}
+
+#title-overlay.faded {
+    opacity: 0.15;
+}
+
+#title-overlay h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 200;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+        0 0 40px rgba(120, 140, 255, 0.4),
+        0 0 80px rgba(120, 140, 255, 0.15);
+}
+
+#title-overlay p {
+    margin-top: 10px;
+    font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* HUD */
+#hud {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    z-index: 10;
+}
+
+.hud-separator {
+    width: 1px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.hud-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 48px;
+}
+
+.hud-label {
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.hud-value {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.85);
+    font-variant-numeric: tabular-nums;
+}
+
+.hud-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.hud-btn:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.hud-btn:active {
+    transform: scale(0.95);
+}
+
+.hud-btn.destruction {
+    color: rgba(255, 130, 100, 0.7);
+    border-color: rgba(255, 100, 70, 0.2);
+}
+
+.hud-btn.destruction:hover {
+    color: rgba(255, 150, 120, 1);
+    background: rgba(255, 80, 50, 0.15);
+    border-color: rgba(255, 100, 70, 0.4);
+}
+
+/* Controls hint */
+#controls-hint {
+    position: fixed;
+    bottom: 76px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 2s ease;
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+    #title-overlay {
+        top: 24px;
+    }
+
+    #hud {
+        bottom: 16px;
+        gap: 10px;
+        padding: 8px 16px;
+    }
+
+    .hud-item {
+        min-width: 36px;
+    }
+
+    .hud-btn {
+        padding: 6px 12px;
+        font-size: 0.6rem;
+    }
+
+    #controls-hint {
+        display: none;
+    }
+}

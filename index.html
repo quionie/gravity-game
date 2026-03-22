@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Gravity — Orbit Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="title-overlay">
+        <h1>Gravity</h1>
+        <p>Click and drag to launch bodies into space</p>
+    </div>
+
+    <div id="hud">
+        <div class="hud-item">
+            <span class="hud-label" id="mode-indicator">SANDBOX</span>
+        </div>
+        <div class="hud-separator"></div>
+        <div class="hud-item">
+            <span class="hud-label">Bodies</span>
+            <span id="body-count" class="hud-value">0</span>
+        </div>
+        <div class="hud-item">
+            <span class="hud-label">Mass</span>
+            <span id="total-mass" class="hud-value">0</span>
+        </div>
+        <div class="hud-item" id="score-display" style="display:none">
+            <span class="hud-label">Score</span>
+            <span id="score-value" class="hud-value">0</span>
+        </div>
+        <div class="hud-item">
+            <span class="hud-label">Speed</span>
+            <span id="time-value" class="hud-value">1.0x</span>
+        </div>
+        <div class="hud-separator"></div>
+        <button id="destruction-btn" class="hud-btn destruction">Destroy</button>
+        <button id="sandbox-btn" class="hud-btn" style="display:none">Sandbox</button>
+        <button id="clear-btn" class="hud-btn">Clear</button>
+    </div>
+
+    <div id="controls-hint">
+        <span>Scroll to change speed</span>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1010,6 +1010,77 @@
         totalMassEl.textContent = Math.round(totalMass);
     }
 
+    // ── Gravity Field Ripples ─────────────────────────────────────────
+    function drawGravityFields(time) {
+        for (const body of bodies) {
+            // Only show fields for bodies with enough mass to matter
+            if (body.mass < 80) continue;
+
+            const r = body.radius;
+            const intensity = Math.min((body.mass - 80) / 400, 1); // 0→1 as mass grows
+            const ringCount = body.type === 'blackhole' ? 8
+                            : body.type === 'star' ? 6
+                            : Math.floor(2 + intensity * 3);
+
+            const maxRadius = r * (4 + intensity * 12);
+            const speed = body.type === 'blackhole' ? 0.0008
+                        : body.type === 'star' ? 0.0012
+                        : 0.0015;
+
+            // Color based on body type
+            let ringR, ringG, ringB;
+            if (body.type === 'blackhole') {
+                ringR = 140; ringG = 80; ringB = 255;
+            } else if (body.type === 'star') {
+                ringR = 255; ringG = 200; ringB = 100;
+            } else {
+                ringR = body.color.h < 60 || body.color.h > 300 ? 255 : 100;
+                ringG = body.color.h > 90 && body.color.h < 200 ? 255 : 150;
+                ringB = body.color.h > 180 && body.color.h < 320 ? 255 : 100;
+            }
+
+            ctx.save();
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < ringCount; i++) {
+                // Each ring expands outward over time then resets
+                const phase = ((time * speed + i / ringCount) % 1);
+                const ringRadius = r * 1.5 + phase * (maxRadius - r * 1.5);
+
+                // Fade in, then fade out
+                let alpha;
+                if (phase < 0.15) alpha = phase / 0.15;
+                else alpha = 1 - (phase - 0.15) / 0.85;
+                alpha *= intensity * 0.2;
+
+                if (alpha < 0.005) continue;
+
+                // Draw dashed ring
+                ctx.beginPath();
+                const segments = 32;
+                const gapRatio = 0.35;
+                for (let s = 0; s < segments; s++) {
+                    const startAngle = (s / segments) * Math.PI * 2;
+                    const endAngle = startAngle + ((1 - gapRatio) / segments) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.arc(body.x, body.y, ringRadius, startAngle, endAngle);
+                    ctx.strokeStyle = `rgba(${ringR}, ${ringG}, ${ringB}, ${alpha})`;
+                    ctx.stroke();
+                }
+
+                // Subtle glow ring behind
+                ctx.beginPath();
+                ctx.arc(body.x, body.y, ringRadius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(${ringR}, ${ringG}, ${ringB}, ${alpha * 0.3})`;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                ctx.lineWidth = 1;
+            }
+
+            ctx.restore();
+        }
+    }
+
     // ── Main Loop ───────────────────────────────────────────────────────
     function loop(now) {
         requestAnimationFrame(loop);
@@ -1053,6 +1124,9 @@
 
         bodies = bodies.filter(b => !b.isOffscreen());
         updateParticles(dt);
+
+        // ── Gravity field ripples ──
+        drawGravityFields(now);
 
         for (const body of bodies) body.draw(now);
         drawParticles();
